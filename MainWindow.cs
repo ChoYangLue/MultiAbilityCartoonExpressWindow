@@ -21,9 +21,8 @@ namespace MultiAbilityCartoonExpressWindow
             public float raito;
             public bool is_portrait;
         }
+        List<MediaInfo> mediaInfoList = new List<MediaInfo>();
 
-        MediaInfo[] mediaInfoList = new MediaInfo[4];
-        int mediaCount = 0;
 
         public MainWindow()
         {
@@ -40,50 +39,56 @@ namespace MultiAbilityCartoonExpressWindow
 
         private void addMediaInfoList(string fileName)
         {
-            if (mediaCount > 4) return;
+            if (mediaInfoList.Count > 4) return;
             Image img = Image.FromFile(fileName);
             MediaInfo medinfo = new MediaInfo();
             medinfo.path = fileName;
             medinfo.img_obj = img;
             medinfo.raito = (float)img.Width / (float)img.Height;
             if (medinfo.raito < 1) medinfo.is_portrait = true;
-            mediaInfoList[0] = medinfo;
-
-            mediaCount = 1;
+            mediaInfoList.Add(medinfo);
+            
         }
 
         private void updatePictureBox()
         {
-            if (mediaCount == 0) return;
+            if (mediaInfoList.Count < 1) return;
 
             //描画先とするImageオブジェクトを作成する
             Bitmap canvas = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             //ImageオブジェクトのGraphicsオブジェクトを作成する
             Graphics g = Graphics.FromImage(canvas);
 
-            if (mediaInfoList[0].is_portrait)
+            for (int i = 0; i < mediaInfoList.Count; i++)
             {
-                if (pictureBox1.Height > mediaInfoList[0].img_obj.Height)
+                //Console.WriteLine(mediaInfoList[i]); // 赤 黄 青が出力される
+
+                if (mediaInfoList[i].is_portrait)
                 {
-                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, (int)mediaInfoList[0].img_obj.Height * mediaInfoList[0].raito, mediaInfoList[0].img_obj.Height);
+                    if (pictureBox1.Height > mediaInfoList[i].img_obj.Height)
+                    {
+                        g.DrawImage(mediaInfoList[i].img_obj, 0, 0, (int)mediaInfoList[i].img_obj.Height * mediaInfoList[i].raito, mediaInfoList[i].img_obj.Height);
+                    }
+                    else
+                    {
+                        g.DrawImage(mediaInfoList[i].img_obj, 0, 0, (int)pictureBox1.Height * mediaInfoList[i].raito, pictureBox1.Height);
+                    }
                 }
                 else
                 {
-                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, (int)pictureBox1.Height * mediaInfoList[0].raito, pictureBox1.Height);
+                    if (pictureBox1.Width > mediaInfoList[i].img_obj.Width)
+                    {
+                        g.DrawImage(mediaInfoList[i].img_obj, 0, 0, mediaInfoList[i].img_obj.Width, (int)mediaInfoList[i].img_obj.Width / mediaInfoList[i].raito);
+                    }
+                    else
+                    {
+                        g.DrawImage(mediaInfoList[i].img_obj, 0, 0, pictureBox1.Width, (int)pictureBox1.Width / mediaInfoList[i].raito);
+                    }
+
                 }
+
             }
-            else
-            {
-                if (pictureBox1.Width > mediaInfoList[0].img_obj.Width)
-                {
-                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, mediaInfoList[0].img_obj.Width, (int)mediaInfoList[0].img_obj.Width / mediaInfoList[0].raito);
-                }
-                else
-                {
-                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, pictureBox1.Width, (int)pictureBox1.Width / mediaInfoList[0].raito);
-                }
-                
-            }
+
 
             //Graphicsオブジェクトのリソースを解放する
             g.Dispose();
@@ -170,6 +175,25 @@ namespace MultiAbilityCartoonExpressWindow
             Control c = (Control)sender;
             Console.WriteLine("フォームのサイズが{0}x{1}に変更されました", c.Width, c.Height);
             updatePictureBox();
+        }
+
+        private void MainWindow_DoubleClick(object sender, EventArgs e)
+        {
+            //自分自身のフォームの状態を調べる
+            switch (this.WindowState)
+            {
+                case FormWindowState.Normal:
+                    Console.WriteLine("普通の状態です");
+                    this.WindowState = FormWindowState.Maximized;
+                    break;
+                case FormWindowState.Minimized:
+                    Console.WriteLine("最小化されています");
+                    break;
+                case FormWindowState.Maximized:
+                    Console.WriteLine("最大化されています");
+                    this.WindowState = FormWindowState.Normal;
+                    break;
+            }
         }
     }
 }
