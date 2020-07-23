@@ -16,5 +16,21 @@ namespace MultiAbilityCartoonExpressWindow
         {
             InitializeComponent();
         }
+
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            this.Width = Properties.Settings.Default.WindowHeightSetting;
+            this.Height = Properties.Settings.Default.WindowWidthSetting;
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.WindowHeightSetting = this.Width;
+            Properties.Settings.Default.WindowWidthSetting = this.Height;
+            Properties.Settings.Default.Save();
+        }
+
+
     }
 }
