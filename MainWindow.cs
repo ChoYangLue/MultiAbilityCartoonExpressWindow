@@ -74,7 +74,6 @@ namespace MultiAbilityCartoonExpressWindow
             }
             else
             {
-                Console.WriteLine("yokonaga");
                 if (pictureBox1.Width > mediaInfoList[0].img_obj.Width)
                 {
                     g.DrawImage(mediaInfoList[0].img_obj, 0, 0, mediaInfoList[0].img_obj.Width, (int)mediaInfoList[0].img_obj.Width / mediaInfoList[0].raito);
@@ -85,10 +84,6 @@ namespace MultiAbilityCartoonExpressWindow
                 }
                 
             }
-
-
-            //g.DrawImage(img, 0, 0, img.Width, img.Height);
-            //g.DrawImage(mediaInfoList[0].img_obj, 0, 0, (int)pictureBox1.Height * mediaInfoList[0].raito, pictureBox1.Height);
 
             //Graphicsオブジェクトのリソースを解放する
             g.Dispose();
@@ -154,31 +149,6 @@ namespace MultiAbilityCartoonExpressWindow
 
             addMediaInfoList(fileName);
             updatePictureBox();
-
-            /*
-            if (mediaInfoList.Count() > 4) return;
-            Image img = Image.FromFile(fileName);
-            MediaInfo medinfo = new MediaInfo();
-            medinfo.path = fileName;
-            medinfo.img_obj = img;
-            medinfo.raito = (float)img.Width / (float)img.Height;
-            mediaInfoList[0] = medinfo;
-
-            //描画先とするImageオブジェクトを作成する
-            Bitmap canvas = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            //ImageオブジェクトのGraphicsオブジェクトを作成する
-            Graphics g = Graphics.FromImage(canvas);
-
-            //g.DrawImage(img, 0, 0, img.Width, img.Height);
-            //g.DrawImage(img, 0, 0, pictureBox1.Width, pictureBox1.Height);
-            g.DrawImage(img, 0, 0, (int)pictureBox1.Height*medinfo.raito, pictureBox1.Height);
-            img.Dispose();
-
-            //Graphicsオブジェクトのリソースを解放する
-            g.Dispose();
-            //pictureBox1に表示する
-            pictureBox1.Image = canvas;
-            */
 
         }
 
