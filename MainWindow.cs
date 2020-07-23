@@ -14,6 +14,16 @@ namespace MultiAbilityCartoonExpressWindow
     {
         //マウスのクリック位置を記憶
         private Point mousePoint;
+        public struct MediaInfo
+        {
+            public string path;
+            public Image img_obj;
+            public float raito;
+            public bool is_portrait;
+        }
+
+        MediaInfo[] mediaInfoList = new MediaInfo[4];
+        int mediaCount = 0;
 
         public MainWindow()
         {
@@ -28,6 +38,63 @@ namespace MultiAbilityCartoonExpressWindow
             return null;
         }
 
+        private void addMediaInfoList(string fileName)
+        {
+            if (mediaCount > 4) return;
+            Image img = Image.FromFile(fileName);
+            MediaInfo medinfo = new MediaInfo();
+            medinfo.path = fileName;
+            medinfo.img_obj = img;
+            medinfo.raito = (float)img.Width / (float)img.Height;
+            if (medinfo.raito < 1) medinfo.is_portrait = true;
+            mediaInfoList[0] = medinfo;
+
+            mediaCount = 1;
+        }
+
+        private void updatePictureBox()
+        {
+            if (mediaCount == 0) return;
+
+            //描画先とするImageオブジェクトを作成する
+            Bitmap canvas = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            //ImageオブジェクトのGraphicsオブジェクトを作成する
+            Graphics g = Graphics.FromImage(canvas);
+
+            if (mediaInfoList[0].is_portrait)
+            {
+                if (pictureBox1.Height > mediaInfoList[0].img_obj.Height)
+                {
+                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, (int)mediaInfoList[0].img_obj.Height * mediaInfoList[0].raito, mediaInfoList[0].img_obj.Height);
+                }
+                else
+                {
+                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, (int)pictureBox1.Height * mediaInfoList[0].raito, pictureBox1.Height);
+                }
+            }
+            else
+            {
+                Console.WriteLine("yokonaga");
+                if (pictureBox1.Width > mediaInfoList[0].img_obj.Width)
+                {
+                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, mediaInfoList[0].img_obj.Width, (int)mediaInfoList[0].img_obj.Width / mediaInfoList[0].raito);
+                }
+                else
+                {
+                    g.DrawImage(mediaInfoList[0].img_obj, 0, 0, pictureBox1.Width, (int)pictureBox1.Width / mediaInfoList[0].raito);
+                }
+                
+            }
+
+
+            //g.DrawImage(img, 0, 0, img.Width, img.Height);
+            //g.DrawImage(mediaInfoList[0].img_obj, 0, 0, (int)pictureBox1.Height * mediaInfoList[0].raito, pictureBox1.Height);
+
+            //Graphicsオブジェクトのリソースを解放する
+            g.Dispose();
+            //pictureBox1に表示する
+            pictureBox1.Image = canvas;
+        }
 
         /* 設定保存 */
 
@@ -85,22 +152,33 @@ namespace MultiAbilityCartoonExpressWindow
             string fileName = this.getFileNameToDragEvent(e);
             Console.WriteLine(fileName);
 
+            addMediaInfoList(fileName);
+            updatePictureBox();
+
+            /*
+            if (mediaInfoList.Count() > 4) return;
+            Image img = Image.FromFile(fileName);
+            MediaInfo medinfo = new MediaInfo();
+            medinfo.path = fileName;
+            medinfo.img_obj = img;
+            medinfo.raito = (float)img.Width / (float)img.Height;
+            mediaInfoList[0] = medinfo;
+
             //描画先とするImageオブジェクトを作成する
             Bitmap canvas = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             //ImageオブジェクトのGraphicsオブジェクトを作成する
             Graphics g = Graphics.FromImage(canvas);
 
-            //画像ファイルを読み込んで、Imageオブジェクトとして取得する
-            Image img = Image.FromFile(fileName);
-
-            g.DrawImage(img, 0, 0, img.Width, img.Height);
-            //Imageオブジェクトのリソースを解放する
+            //g.DrawImage(img, 0, 0, img.Width, img.Height);
+            //g.DrawImage(img, 0, 0, pictureBox1.Width, pictureBox1.Height);
+            g.DrawImage(img, 0, 0, (int)pictureBox1.Height*medinfo.raito, pictureBox1.Height);
             img.Dispose();
 
             //Graphicsオブジェクトのリソースを解放する
             g.Dispose();
             //pictureBox1に表示する
             pictureBox1.Image = canvas;
+            */
 
         }
 
@@ -109,6 +187,19 @@ namespace MultiAbilityCartoonExpressWindow
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.All;
             else e.Effect = DragDropEffects.None;
 
+        }
+
+        private void MainWindow_Resize(object sender, EventArgs e)
+        {
+            Control c = (Control)sender;
+            //Console.WriteLine("フォームのサイズが{0}x{1}に変更されました", c.Width, c.Height);
+        }
+
+        private void MainWindow_ResizeEnd(object sender, EventArgs e)
+        {
+            Control c = (Control)sender;
+            Console.WriteLine("フォームのサイズが{0}x{1}に変更されました", c.Width, c.Height);
+            updatePictureBox();
         }
     }
 }
