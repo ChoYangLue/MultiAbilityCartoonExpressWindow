@@ -46,5 +46,29 @@ namespace MultiAbilityCartoonExpressWindow.Properties {
                 this["WindowWidthSetting"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int WindowLeftSetting {
+            get {
+                return ((int)(this["WindowLeftSetting"]));
+            }
+            set {
+                this["WindowLeftSetting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int WindowTopSetting {
+            get {
+                return ((int)(this["WindowTopSetting"]));
+            }
+            set {
+                this["WindowTopSetting"] = value;
+            }
+        }
     }
 }

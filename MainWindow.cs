@@ -22,7 +22,7 @@ namespace MultiAbilityCartoonExpressWindow
             public string dir;
         }
         List<MediaInfo> mediaInfoList = new List<MediaInfo>();
-        public static readonly List<string> ImageExtensions = new List<string> { ".jpg", ".jpeg", ".bmp", ".gif", ".png", "JPG" };
+        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".BMP", ".GIF", ".PNG" };
 
         public MainWindow()
         {
@@ -130,28 +130,25 @@ namespace MultiAbilityCartoonExpressWindow
             string dir = System.IO.Path.GetDirectoryName(fileName);
             IEnumerable<string> files = Directory.EnumerateFiles(dir, "*");
 
-            string previus = fileName;
+            string previus = files.ElementAt(files.Count() -1);
             int i = 0;
             foreach (string str in files)
             {
-                if (str == fileName)
-                {
-                    if (next_flag)
-                    {
-                        if (i+1 < files.Count()) return files.ElementAt(i + 1);
-                        return files.ElementAt(0);
-                    }
-                    return previus;
-                }
-                Console.WriteLine(str);
-                /*
                 if (ImageExtensions.Contains(Path.GetExtension(str).ToUpperInvariant()))
                 {
+                    if (str == fileName)
+                    {
+                        Console.WriteLine("[" + i + "]" + " " + str);
+                        if (next_flag)
+                        {
+                            if (i+1 < files.Count()) return files.ElementAt(i + 1);
+                            return files.ElementAt(0);
+                        }
+                        return previus;
+                    }
+                    previus = str;
 
                 }
-                */
-                Console.WriteLine(i);
-                previus = str;
                 i += 1;
             }
 
@@ -164,12 +161,16 @@ namespace MultiAbilityCartoonExpressWindow
         {
             this.Width = Properties.Settings.Default.WindowHeightSetting;
             this.Height = Properties.Settings.Default.WindowWidthSetting;
+            this.Left = Properties.Settings.Default.WindowLeftSetting;
+            this.Top = Properties.Settings.Default.WindowTopSetting;
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.WindowHeightSetting = this.Width;
             Properties.Settings.Default.WindowWidthSetting = this.Height;
+            Properties.Settings.Default.WindowLeftSetting = this.Left;
+            Properties.Settings.Default.WindowTopSetting = this.Top;
             Properties.Settings.Default.Save();
         }
         

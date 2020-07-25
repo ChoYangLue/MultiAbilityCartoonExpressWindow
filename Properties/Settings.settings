@@ -8,5 +8,11 @@
     <Setting Name="WindowWidthSetting" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">600</Value>
     </Setting>
+    <Setting Name="WindowLeftSetting" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="WindowTopSetting" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
