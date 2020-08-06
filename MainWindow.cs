@@ -23,6 +23,12 @@ namespace MultiAbilityCartoonExpressWindow
         }
         List<MediaInfo> mediaInfoList = new List<MediaInfo>();
         public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".BMP", ".GIF", ".PNG" };
+        public struct OverSizeInfo
+        {
+            public bool over_flag;
+            public bool is_width;
+            public int over_pix;
+        }
 
         public MainWindow()
         {
@@ -77,8 +83,38 @@ namespace MultiAbilityCartoonExpressWindow
                 bool is_portrait = false;
                 if (raito < 1) is_portrait = true;
 
-                int width_tmp = 0;
-                int height_tmp = 0;
+                int width_tmp = img_obj.Width;
+                int height_tmp = img_obj.Height;
+
+                var info = new OverSizeInfo();
+                getOverSizeInfo(img_obj.Width, img_obj.Height, ref info);
+
+                if (info.over_flag)
+                {
+                    if (info.is_width)
+                    {
+                        width_tmp = pictureBox1.Width;
+                        height_tmp = (int)(pictureBox1.Width / raito);
+                    }
+                    else
+                    {
+                        width_tmp = (int)(pictureBox1.Height * raito);
+                        height_tmp = pictureBox1.Height;
+                    }
+                }
+                g.DrawImage(img_obj, width_index, height_index, width_tmp, height_tmp);
+
+                if (is_portrait)
+                {
+                    width_index += width_tmp;
+                }
+                else
+                {
+                    height_index += height_tmp;
+                }
+
+                // 残しとく
+                /*
                 if (is_portrait)
                 {
                     if (pictureBox1.Height > img_obj.Height)
@@ -93,7 +129,7 @@ namespace MultiAbilityCartoonExpressWindow
                         height_tmp = pictureBox1.Height;
                         //g.DrawImage(img_obj, width_index, 0, (int)pictureBox1.Height * raito, pictureBox1.Height);
                     }
-                    
+
                     g.DrawImage(img_obj, width_index, height_index, width_tmp, height_tmp);
                     width_index += width_tmp;
                 }
@@ -113,7 +149,7 @@ namespace MultiAbilityCartoonExpressWindow
                     }
                     g.DrawImage(img_obj, width_index, height_index, width_tmp, height_tmp);
                     height_index += height_tmp;
-                }
+                }*/
 
                 img_obj.Dispose();
             }
@@ -153,6 +189,39 @@ namespace MultiAbilityCartoonExpressWindow
             }
 
             return fileName;
+        }
+
+        private bool isWindowPortrait()
+        {
+            // 縦長
+            if (this.Width < this.Height) return true;
+            return false;
+        }
+
+        private void getOverSizeInfo(int width, int height, ref OverSizeInfo info)
+        {
+            int width_over_pix = width - this.Width;
+            int height_over_pix = height - this.Height;
+
+            // そもそもオーバーサイズなのか
+            if (width_over_pix <= 0 && height_over_pix <= 0)
+            {
+                info.over_flag = false;
+                return;
+            }
+            info.over_flag = true;
+            
+            // 縦横どちらがより多くオーバーしているか
+            if (width_over_pix > height_over_pix)
+            {
+                info.is_width = true;
+                info.over_pix = width_over_pix;
+            }
+            else
+            {
+                info.is_width = false;
+                info.over_pix = height_over_pix;
+            }
         }
 
         /* 設定保存 */
