@@ -20,6 +20,10 @@ namespace MultiAbilityCartoonExpressWindow
         {
             public string path;
             public string dir;
+            public int now_width;
+            public int now_height;
+            public int now_left;
+            public int now_top;
         }
         List<MediaInfo> mediaInfoList = new List<MediaInfo>();
         public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".BMP", ".GIF", ".PNG" };
@@ -29,10 +33,12 @@ namespace MultiAbilityCartoonExpressWindow
             public bool is_width;
             public int over_pix;
         }
+        public int image_forcus;
 
         public MainWindow()
         {
             InitializeComponent();
+            image_forcus = 0;
         }
 
 
@@ -49,6 +55,10 @@ namespace MultiAbilityCartoonExpressWindow
             MediaInfo medinfo = new MediaInfo();
             medinfo.path = fileName;
             medinfo.dir = System.IO.Path.GetDirectoryName(fileName);
+            medinfo.now_width = 0;
+            medinfo.now_height = 0;
+            medinfo.now_top = 0;
+            medinfo.now_left = 0;
 
             mediaInfoList.Add(medinfo);
         }
@@ -61,7 +71,11 @@ namespace MultiAbilityCartoonExpressWindow
             MediaInfo medinfo = new MediaInfo();
             medinfo.path = fileName;
             medinfo.dir = System.IO.Path.GetDirectoryName(fileName);
-            
+            medinfo.now_width = 0;
+            medinfo.now_height = 0;
+            medinfo.now_top = 0;
+            medinfo.now_left = 0;
+
             mediaInfoList[index] = medinfo;
         }
 
@@ -104,6 +118,13 @@ namespace MultiAbilityCartoonExpressWindow
                     }
                 }
                 g.DrawImage(img_obj, width_index, height_index, width_tmp, height_tmp);
+
+                MediaInfo med_info = mediaInfoList[i];
+                med_info.now_width = width_tmp;
+                med_info.now_height = height_tmp;
+                med_info.now_left = width_index;
+                med_info.now_top = height_index;
+                mediaInfoList[i] = med_info;
 
                 if (is_portrait)
                 {
@@ -225,6 +246,23 @@ namespace MultiAbilityCartoonExpressWindow
             }
         }
 
+        private void updateImageFocus(Point mouse)
+        {
+            for (int index = 0; index < mediaInfoList.Count; index++)
+            {
+                // クリックした場所に画像があるかどうか
+                if (mediaInfoList[index].now_left < mouse.X && mouse.X < mediaInfoList[index].now_left + mediaInfoList[index].now_width)
+                {
+                    if (mediaInfoList[index].now_top < mouse.Y && mouse.Y < mediaInfoList[index].now_top + mediaInfoList[index].now_height)
+                    {
+                        image_forcus = index;
+                        return;
+                    }
+                }
+            }
+
+        }
+
         /* 設定保存 */
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -252,6 +290,10 @@ namespace MultiAbilityCartoonExpressWindow
             {
                 //位置を記憶する
                 mousePoint = new Point(e.X, e.Y);
+
+                updateImageFocus(mousePoint);
+
+                Console.WriteLine(image_forcus);
             }
             else if ((e.Button & MouseButtons.Middle) == MouseButtons.Middle)
             {
@@ -279,19 +321,19 @@ namespace MultiAbilityCartoonExpressWindow
             else if (e.KeyCode == Keys.Left)
             {
                 // 前の画像
-                string filename = searchDir(mediaInfoList[0].path, false);
+                string filename = searchDir(mediaInfoList[image_forcus].path, false);
                 Console.WriteLine("pre:"+ filename);
                 
-                insertMediaInfoList(filename, 0);
+                insertMediaInfoList(filename, image_forcus);
                 updatePictureBox();
             }
             else if (e.KeyCode == Keys.Right)
             {
                 // 次の画像
-                string filename = searchDir(mediaInfoList[0].path, true);
+                string filename = searchDir(mediaInfoList[image_forcus].path, true);
                 Console.WriteLine("next:" + filename);
 
-                insertMediaInfoList(filename, 0);
+                insertMediaInfoList(filename, image_forcus);
                 updatePictureBox();
             }
         }
