@@ -12,7 +12,7 @@ namespace MultiAbilityCartoonExpressWindow.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -68,6 +68,54 @@ namespace MultiAbilityCartoonExpressWindow.Properties {
             }
             set {
                 this["WindowTopSetting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string ImageBufferSetting0 {
+            get {
+                return ((string)(this["ImageBufferSetting0"]));
+            }
+            set {
+                this["ImageBufferSetting0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string ImageBufferSetting1 {
+            get {
+                return ((string)(this["ImageBufferSetting1"]));
+            }
+            set {
+                this["ImageBufferSetting1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string ImageBufferSetting2 {
+            get {
+                return ((string)(this["ImageBufferSetting2"]));
+            }
+            set {
+                this["ImageBufferSetting2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string ImageBufferSetting3 {
+            get {
+                return ((string)(this["ImageBufferSetting3"]));
+            }
+            set {
+                this["ImageBufferSetting3"] = value;
             }
         }
     }

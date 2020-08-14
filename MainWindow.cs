@@ -260,6 +260,36 @@ namespace MultiAbilityCartoonExpressWindow
             this.Height = Properties.Settings.Default.WindowWidthSetting;
             this.Left = Properties.Settings.Default.WindowLeftSetting;
             this.Top = Properties.Settings.Default.WindowTopSetting;
+
+            if (Properties.Settings.Default.ImageBufferSetting0 != "")
+            {
+                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting0);
+
+                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting0);
+                updatePictureBox();
+            }
+            else if (Properties.Settings.Default.ImageBufferSetting1 != "")
+            {
+                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting1);
+
+                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting1);
+                updatePictureBox();
+            }
+            else if (Properties.Settings.Default.ImageBufferSetting2 != "")
+            {
+                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting2);
+
+                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting2);
+                updatePictureBox();
+            }
+            else if (Properties.Settings.Default.ImageBufferSetting3 != "")
+            {
+                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting3);
+
+                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting3);
+                updatePictureBox();
+            }
+
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -269,6 +299,45 @@ namespace MultiAbilityCartoonExpressWindow
             Properties.Settings.Default.WindowLeftSetting = this.Left;
             Properties.Settings.Default.WindowTopSetting = this.Top;
             Properties.Settings.Default.Save();
+        }
+
+        private void saveSettingByMediaInfo()
+        {
+            if (mediaInfoList.Count() == 0)
+            {
+                Properties.Settings.Default.ImageBufferSetting0 = "";
+                Properties.Settings.Default.ImageBufferSetting1 = "";
+                Properties.Settings.Default.ImageBufferSetting2 = "";
+                Properties.Settings.Default.ImageBufferSetting3 = "";
+            }
+            else if (mediaInfoList.Count() == 1)
+            {
+                Properties.Settings.Default.ImageBufferSetting0 = mediaInfoList[0].path;
+                Properties.Settings.Default.ImageBufferSetting1 = "";
+                Properties.Settings.Default.ImageBufferSetting2 = "";
+                Properties.Settings.Default.ImageBufferSetting3 = "";
+            }
+            else if (mediaInfoList.Count() == 2)
+            {
+                Properties.Settings.Default.ImageBufferSetting0 = mediaInfoList[0].path;
+                Properties.Settings.Default.ImageBufferSetting1 = mediaInfoList[1].path;
+                Properties.Settings.Default.ImageBufferSetting2 = "";
+                Properties.Settings.Default.ImageBufferSetting3 = "";
+            }
+            else if (mediaInfoList.Count() == 3)
+            {
+                Properties.Settings.Default.ImageBufferSetting0 = mediaInfoList[0].path;
+                Properties.Settings.Default.ImageBufferSetting1 = mediaInfoList[1].path;
+                Properties.Settings.Default.ImageBufferSetting2 = mediaInfoList[2].path;
+                Properties.Settings.Default.ImageBufferSetting3 = "";
+            }
+            else if (mediaInfoList.Count() == 4)
+            {
+                Properties.Settings.Default.ImageBufferSetting0 = mediaInfoList[0].path;
+                Properties.Settings.Default.ImageBufferSetting1 = mediaInfoList[1].path;
+                Properties.Settings.Default.ImageBufferSetting2 = mediaInfoList[2].path;
+                Properties.Settings.Default.ImageBufferSetting3 = mediaInfoList[3].path;
+            }
         }
         
         /* window操作関連 */
@@ -291,11 +360,10 @@ namespace MultiAbilityCartoonExpressWindow
 
                 int tmp = updateImageFocus(mousePoint);
 
-                removeMediaInfoList(tmp);
-
                 if (tmp < 0)
                 {
                     // 履歴を保存してから終了
+                    saveSettingByMediaInfo();
 
                     this.Close();
                     Application.Exit();
@@ -306,6 +374,8 @@ namespace MultiAbilityCartoonExpressWindow
                     this.Close();
                     Application.Exit();
                 }
+
+                removeMediaInfoList(tmp);
 
                 updatePictureBox();
             }
