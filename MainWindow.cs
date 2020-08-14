@@ -52,6 +52,8 @@ namespace MultiAbilityCartoonExpressWindow
         private void addMediaInfoList(string fileName)
         {
             if (mediaInfoList.Count > 4) return;
+            if (File.Exists(fileName) != true) return;
+
             MediaInfo medinfo = new MediaInfo();
             medinfo.path = fileName;
             medinfo.dir = System.IO.Path.GetDirectoryName(fileName);
@@ -69,7 +71,8 @@ namespace MultiAbilityCartoonExpressWindow
         {
             if (index > 4) return;
             if (mediaInfoList.Count() < index) return;
-            
+            if (File.Exists(fileName) != true) return;
+
             MediaInfo medinfo = new MediaInfo();
             medinfo.path = fileName;
             medinfo.dir = System.IO.Path.GetDirectoryName(fileName);
