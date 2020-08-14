@@ -7,6 +7,12 @@ MultiAbilityCartoonExpressWindow
 * C#
 * .NET Framework4.7.2
 
+# 対応フォーマット
+* png
+* jpg
+* bmp
+* gif(non anime)
+
 # 操作説明
 
 | 操作 | 説明 |
