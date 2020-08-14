@@ -89,13 +89,20 @@ namespace MultiAbilityCartoonExpressWindow
 
         private void updatePictureBox()
         {
-            if (mediaInfoList.Count < 1) return;
-
             //描画先とするImageオブジェクトを作成する
             Bitmap canvas = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            //ImageオブジェクトのGraphicsオブジェクトを作成する
+
             Graphics g = Graphics.FromImage(canvas);
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+
+            if (mediaInfoList.Count <= 0)
+            {
+                // 要素がない場合は元の画像を削除してから処理を抜ける
+                g.Dispose();
+
+                pictureBox1.Image = canvas;
+                return;
+            }
 
             int width_index = 0;
             int height_index = 0;
@@ -275,7 +282,7 @@ namespace MultiAbilityCartoonExpressWindow
 
                 updateImageFocus(mousePoint);
 
-                Console.WriteLine(image_forcus);
+                Console.WriteLine("image focus: "+image_forcus.ToString());
             }
             else if ((e.Button & MouseButtons.Middle) == MouseButtons.Middle)
             {
@@ -286,7 +293,15 @@ namespace MultiAbilityCartoonExpressWindow
 
                 removeMediaInfoList(tmp);
 
-                if(mediaInfoList.Count == 0 && tmp < 0)
+                if (tmp < 0)
+                {
+                    // 履歴を保存してから終了
+
+                    this.Close();
+                    Application.Exit();
+                }
+
+                if(mediaInfoList.Count == 0)
                 {
                     this.Close();
                     Application.Exit();
