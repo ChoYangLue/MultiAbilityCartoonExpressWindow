@@ -95,7 +95,9 @@ namespace MultiAbilityCartoonExpressWindow
             Bitmap canvas = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
             Graphics g = Graphics.FromImage(canvas);
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+            //g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
+            //g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
             if (mediaInfoList.Count <= 0)
             {
