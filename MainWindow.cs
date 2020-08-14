@@ -79,6 +79,14 @@ namespace MultiAbilityCartoonExpressWindow
             mediaInfoList[index] = medinfo;
         }
 
+        private void removeMediaInfoList(int index)
+        {
+            if (index < 0 || index >= 4) return;
+
+            mediaInfoList.RemoveAt(index);
+            Console.WriteLine("remove: "+index.ToString());
+        }
+
         private void updatePictureBox()
         {
             if (mediaInfoList.Count < 1) return;
@@ -134,44 +142,6 @@ namespace MultiAbilityCartoonExpressWindow
                 {
                     height_index += height_tmp;
                 }
-
-                // 残しとく
-                /*
-                if (is_portrait)
-                {
-                    if (pictureBox1.Height > img_obj.Height)
-                    {
-                        width_tmp = (int)(img_obj.Height * raito);
-                        height_tmp = img_obj.Height;
-                        //g.DrawImage(img_obj, width_index, 0, (int)img_obj.Height * raito, img_obj.Height);
-                    }
-                    else
-                    {
-                        width_tmp = (int)(pictureBox1.Height * raito);
-                        height_tmp = pictureBox1.Height;
-                        //g.DrawImage(img_obj, width_index, 0, (int)pictureBox1.Height * raito, pictureBox1.Height);
-                    }
-
-                    g.DrawImage(img_obj, width_index, height_index, width_tmp, height_tmp);
-                    width_index += width_tmp;
-                }
-                else
-                {
-                    if (pictureBox1.Width > img_obj.Width)
-                    {
-                        width_tmp = img_obj.Width;
-                        height_tmp = (int)(img_obj.Width / raito);
-                        //g.DrawImage(img_obj, width_index, 0, img_obj.Width, (int)img_obj.Width / raito);
-                    }
-                    else
-                    {
-                        width_tmp = pictureBox1.Width;
-                        height_tmp = (int)(pictureBox1.Width / raito);
-                        //g.DrawImage(img_obj, width_index, 0, pictureBox1.Width, (int)pictureBox1.Width / raito);
-                    }
-                    g.DrawImage(img_obj, width_index, height_index, width_tmp, height_tmp);
-                    height_index += height_tmp;
-                }*/
 
                 img_obj.Dispose();
             }
@@ -246,7 +216,7 @@ namespace MultiAbilityCartoonExpressWindow
             }
         }
 
-        private void updateImageFocus(Point mouse)
+        private int updateImageFocus(Point mouse)
         {
             for (int index = 0; index < mediaInfoList.Count; index++)
             {
@@ -256,11 +226,23 @@ namespace MultiAbilityCartoonExpressWindow
                     if (mediaInfoList[index].now_top < mouse.Y && mouse.Y < mediaInfoList[index].now_top + mediaInfoList[index].now_height)
                     {
                         image_forcus = index;
-                        return;
+                        return index;
                     }
                 }
             }
 
+            return -1;
+        }
+
+        private void walkToImage(bool next_f)
+        {
+            if (mediaInfoList.Count <= 0) return;
+
+            string filename = searchDir(mediaInfoList[image_forcus].path, next_f);
+            Console.WriteLine("pre:" + filename);
+
+            insertMediaInfoList(filename, image_forcus);
+            updatePictureBox();
         }
 
         /* 設定保存 */
@@ -297,8 +279,20 @@ namespace MultiAbilityCartoonExpressWindow
             }
             else if ((e.Button & MouseButtons.Middle) == MouseButtons.Middle)
             {
-                this.Close();
-                Application.Exit();
+                //位置を記憶する
+                mousePoint = new Point(e.X, e.Y);
+
+                int tmp = updateImageFocus(mousePoint);
+
+                removeMediaInfoList(tmp);
+
+                if(mediaInfoList.Count == 0 && tmp < 0)
+                {
+                    this.Close();
+                    Application.Exit();
+                }
+
+                updatePictureBox();
             }
         }
 
@@ -321,20 +315,12 @@ namespace MultiAbilityCartoonExpressWindow
             else if (e.KeyCode == Keys.Left)
             {
                 // 前の画像
-                string filename = searchDir(mediaInfoList[image_forcus].path, false);
-                Console.WriteLine("pre:"+ filename);
-                
-                insertMediaInfoList(filename, image_forcus);
-                updatePictureBox();
+                walkToImage(false);
             }
             else if (e.KeyCode == Keys.Right)
             {
                 // 次の画像
-                string filename = searchDir(mediaInfoList[image_forcus].path, true);
-                Console.WriteLine("next:" + filename);
-
-                insertMediaInfoList(filename, image_forcus);
-                updatePictureBox();
+                walkToImage(true);
             }
         }
 
