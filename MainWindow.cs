@@ -61,6 +61,8 @@ namespace MultiAbilityCartoonExpressWindow
             medinfo.now_left = 0;
 
             mediaInfoList.Add(medinfo);
+
+            Console.WriteLine("add :"+fileName);
         }
 
         private void insertMediaInfoList(string fileName, int index)
@@ -261,35 +263,17 @@ namespace MultiAbilityCartoonExpressWindow
             this.Left = Properties.Settings.Default.WindowLeftSetting;
             this.Top = Properties.Settings.Default.WindowTopSetting;
 
-            if (Properties.Settings.Default.ImageBufferSetting0 != "")
-            {
-                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting0);
+            Console.WriteLine(Properties.Settings.Default.ImageBufferSetting0);
+            Console.WriteLine(Properties.Settings.Default.ImageBufferSetting1);
+            Console.WriteLine(Properties.Settings.Default.ImageBufferSetting2);
+            Console.WriteLine(Properties.Settings.Default.ImageBufferSetting3);
 
-                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting0);
-                updatePictureBox();
-            }
-            else if (Properties.Settings.Default.ImageBufferSetting1 != "")
-            {
-                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting1);
+            if (Properties.Settings.Default.ImageBufferSetting0 != "") addMediaInfoList(Properties.Settings.Default.ImageBufferSetting0);
+            if (Properties.Settings.Default.ImageBufferSetting1 != "") addMediaInfoList(Properties.Settings.Default.ImageBufferSetting1);
+            if (Properties.Settings.Default.ImageBufferSetting2 != "") addMediaInfoList(Properties.Settings.Default.ImageBufferSetting2);
+            if (Properties.Settings.Default.ImageBufferSetting3 != "") addMediaInfoList(Properties.Settings.Default.ImageBufferSetting3);
 
-                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting1);
-                updatePictureBox();
-            }
-            else if (Properties.Settings.Default.ImageBufferSetting2 != "")
-            {
-                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting2);
-
-                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting2);
-                updatePictureBox();
-            }
-            else if (Properties.Settings.Default.ImageBufferSetting3 != "")
-            {
-                Console.WriteLine(Properties.Settings.Default.ImageBufferSetting3);
-
-                addMediaInfoList(Properties.Settings.Default.ImageBufferSetting3);
-                updatePictureBox();
-            }
-
+            updatePictureBox();
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -303,6 +287,7 @@ namespace MultiAbilityCartoonExpressWindow
 
         private void saveSettingByMediaInfo()
         {
+            Console.WriteLine("save at "+mediaInfoList.Count().ToString()+"files.");
             if (mediaInfoList.Count() == 0)
             {
                 Properties.Settings.Default.ImageBufferSetting0 = "";
